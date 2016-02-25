@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container">
+
+    <header>
+        <% include ../partials/header %>
+    </header>
+
+    <main>
+        <div class="container-fluid">
+            <div class="row" style="margin-top:20px">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+                <form role="form" method="post" action="/user/edit/<%= user.id %>" id="form" data-autosubmit>
+                        <h2>Edit <%= user.name %></h2>
+                        <hr class="colorgraph">
+                        Name:
+                        <div class="form-group">
+                            <input type="text" name="name" id="name" class="form-control input-lg" placeholder="Name" required="true" value="<%= user.name %>">
+                        </div>
+                        Email:
+                        <div class="form-group">
+                            <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email" required="true" value="<%= user.email %>">
+                        </div>
+                        Phone:
+                        <div class="form-group">
+                            <input type="tell" pattern='^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$' name="phone" id="phone" class="form-control input-lg" placeholder="Phone" value="<%= user.phone %>">
+                        </div>
+                        Address:
+                        <div class="form-group">
+                            <input type="text" name="address" id="address" class="form-control input-lg" placeholder="Address" value="<%= user.address %>">
+                        </div>
+                        <hr class="colorgraph">
+                        <div class="row">
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-sm-offset-8 col-md-offset-8 col-xs-offset-8">
+                                <button type="submit" class="btn btn-lg btn-primary btn-block" name="signup" value="Sign up">Submit</button>
+                            </div>
+                        </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <% include ../partials/footer %>
+    </footer>
+
+    <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/edit_user.js"></script>
+    
+</body>
+</html>

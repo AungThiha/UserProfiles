@@ -1,0 +1,42 @@
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container">
+
+    <header>
+        <% include ../partials/header %>
+    </header>
+
+    <main>
+        <div class="container-fluid">
+            <a href="/user/new" class="btn btn-primary">New user</a>
+
+            <div class="row" style="margin-top: 20px;">
+                <% users.forEach(function(user){ %>
+                    <div class="col-md-3 card-wrapper">
+                    <div class="card">
+                        <h3><%= user.name %></h3>
+                        <ul>
+                            <li><%= user.email %></li>
+                            <li><%= user.phone %></li>
+                            <li><%= user.address %></li>
+                        </ul>
+                        <i class="action-icon glyphicon glyphicon-trash" id="<%= user.id %>"></i>
+                        <a href="/user/edit/<%= user.id %>" style="color: inherit;"><i class="action-icon glyphicon glyphicon-pencil"></i></a>
+                    </div>
+                    </div>
+                <% });%>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <% include ../partials/footer %>
+    </footer>
+    <script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
+</body>
+</html>
