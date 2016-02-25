@@ -17,6 +17,12 @@ ul {
   overflow:hidden;
 }
 
+@media (min-width: 992px) { 
+  .card-wrapper {
+    min-height: 200px;  
+  }
+}
+
 .card {
 	padding: 0 15px 10px 15px;
 	border-radius: 5px;
