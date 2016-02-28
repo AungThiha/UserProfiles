@@ -144,13 +144,15 @@ module.exports = function(app){
             res.json({ error: true, message: 'user not exist'});
             return;
         }
-        req.user.remove(function(err){
-            if (err) {
-                res.status(500);
-                res.json({ error: true, message: 'database error'});
-                return;
-            }
-            res.json({ error: null, message: 'user deleted'});
+        Session.remove({ email: req.user.email}, function(err){
+            req.user.remove(function(err){
+                if (err) {
+                    res.status(500);
+                    res.json({ error: true, message: 'database error'});
+                    return;
+                }
+                res.json({ error: null, message: 'user deleted'});
+            });
         });
     });
 
