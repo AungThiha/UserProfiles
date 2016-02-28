@@ -9,10 +9,14 @@
   "author": "Aung Thiha",
   "license": "ISC",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "bleach": "^0.3.0",
     "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.1",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
-    "mongoose": "^4.4.5"
+    "express-session": "^1.13.0",
+    "mongoose": "^4.4.5",
+    "passport-remember-me": "0.0.1"
   }
 }

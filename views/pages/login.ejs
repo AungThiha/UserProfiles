@@ -1,0 +1,52 @@
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container">
+
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">
+                    <span class="glyphicon glyphicon-user"></span>
+                    Users
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container-fluid">
+            <div class="row" style="margin-top:20px">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+                <form role="form" method="post" action="/user/login" id="form" data-autosubmit>
+                        <h2>Login</h2>
+                        <hr class="colorgraph">
+                        Email:
+                        <div class="form-group">
+                            <input type="email" name="email" id="email" class="form-control input-lg" placeholder="Email" required="true">
+                        </div>
+                        Password:
+                        <div class="form-group">
+                            <input type="password" name="password" id="password" class="form-control input-lg" placeholder="Password">
+                        </div>
+                        
+                        <hr class="colorgraph">
+                        <div class="row">
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-sm-offset-8 col-md-offset-8 col-xs-offset-8">
+                                <button type="submit" class="btn btn-lg btn-primary btn-block" name="signup" value="Sign up">Submit</button>
+                            </div>
+                        </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </main>
+
+    <% include ../partials/footer %>
+
+    <script type="text/javascript" src="/js/login.js"></script>
+    
+</body>
+</html>

@@ -1,18 +1,28 @@
 
 var User = require('./models/user'),
+    Session = require('./models/session'),
     bleach = require('bleach');
 
 module.exports = function(app){
 
     /* GET */
-    app.get('/', function(req, res){
+    app.get('/', isLoggedIn ,function(req, res){
 
         User.find({}, function(err, users) {
             if (err) throw err;
             // object of all the users
-            res.render('pages/index', {users: users});
+            res.render('pages/index', {users: users, user: req.user});
         });
 
+    });
+
+
+    app.get('/user/login', isLoggedIn, function(req, res){
+        if (req.user) {
+            res.redirect('/');
+            return;
+        }
+        res.render('pages/login');
     });
 
     app.get('/user/new', function(req, res){
@@ -29,6 +39,55 @@ module.exports = function(app){
     /* END GET */
 
     /* POST */
+
+    app.post('/user/login', function(req, res){
+        var email = req.body['email'];
+        var password = req.body['password'];
+        User.findOne({ email: email}, function(err, user){
+            if (err) {
+                res.status(400);
+                res.json({ error: true, message: err});
+            }
+            if (user.validPassword(password)) {
+                var session = Session({
+                    name: user.name,
+                    email: user.email,
+                    phone: user.phone,
+                    address: user.address
+                });
+                session.save(function(err, session){
+                    if (err){
+                        res.status(500);
+                        res.json({ error: true, message: err});
+                        return;
+                    }
+                    res.cookie('token', session.id, { maxAge: 9999999 });
+                    res.json({error: null, message: 'user created'});
+                });
+            }
+        });
+    });
+
+    app.post('/user/logout', function(req, res){
+        if (req.cookies.token) {
+            Session.remove({ '_id': req.cookies.token}, function(err){
+                if (err) {
+                    res.status(500);
+                    res.json({ error: true, message: err});
+                }
+                res.clearCookie('token');
+                res.json({ error: null, message: "successfully logged out."});
+            });  
+        }else{
+            res.status(403);
+            res.json({ error: true, message: "You're not logged in"});
+        }
+        
+        
+    });
+
+
+
     app.post('/user/new', function(req, res){
 
         if (!req.body.hasOwnProperty('name')) {
@@ -50,17 +109,31 @@ module.exports = function(app){
             name: bleach.sanitize(req.body['name']),
             email: req.body['email'],
             phone: req.body['phone'],
-            address: bleach.sanitize(req.body['address'])
+            address: bleach.sanitize(req.body['address']),
+            password: User.generateHash(req.body['password'])
         });
 
-        newUser.save(function(err){
+        newUser.save(function(err, user){
             if (err){
                 res.status(500);
                 res.json({ error: true, message: err});
                 return;
             }
-            res.status(200);
-            res.json({error: null, message: 'user created'});
+            var session = Session({
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                address: user.address
+            });
+            session.save(function(err, session){
+                if (err){
+                    res.status(500);
+                    res.json({ error: true, message: err});
+                    return;
+                }
+                res.cookie('token', session.id, { maxAge: 9999999 });
+                res.json({error: null, message: 'user created'});
+            });
         });
 
     });
@@ -126,6 +199,25 @@ module.exports = function(app){
         });
     });
     /* END POST */
+
+
+    // route middleware to make sure a user is logged in
+    function isLoggedIn(req, res, next){
+        // if user is authenticated in the session, carry on
+        if (req.cookies.token){
+            Session.findById(req.cookies.token, function(err, session){
+                if (err) {
+                    res.clearCookie('token');
+                    return next();
+                }
+                req.user = session;
+                return next();
+            });
+        }else{
+            return next();
+        }
+        
+    }
 
 
 }
