@@ -7,6 +7,12 @@ $(document).ready(function() {
         $.ajax({
             url: '/user/delete/' + id,
             type: 'POST',
+        })
+        .done(function() {
+            $("ul.navbar-right").html('<li><a href="/user/login" id="login">Login</a></li>');
+        })
+        .fail(function() {
+            alert( "server error" );
         });
     });
 });

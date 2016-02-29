@@ -16,7 +16,6 @@ module.exports = function(app, passport){
 
     });
 
-
     app.get('/user/login', function(req, res){
         if (req.session['me']) {
             res.json(req.session['me']);
@@ -39,7 +38,7 @@ module.exports = function(app, passport){
             res.json({ error: true, message: "You're not authorized"});
             return;
         }
-        res.render('pages/edit_user', {user: req.user});
+        res.render('pages/edit_user', {user: req.user, me: req.session['me']});
     });
 
     app.get('/user/:user_id', function(req, res){
@@ -88,6 +87,7 @@ module.exports = function(app, passport){
                 res.json({ error: true, message: 'database error'});
                 return;
             }
+            req.session.reset();
             res.json({ error: null, message: 'user deleted'});
         });
     });
