@@ -6,7 +6,8 @@ var express = require('express'),
     passport = require('passport'),
     flash = require('connect-flash'),
     morgan = require('morgan'),
-    session = require('client-sessions');
+    session = require('client-sessions'),
+    User = require('./app/models/user');
 
 var port = process.env.PORT || 8080;
 var app = express();
@@ -42,7 +43,20 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-require('./app/routes')(app, passport);
+app.get('/', function(req, res){
+
+        User.find({}, function(err, users) {
+            if (err) throw err;
+            // object of all the users
+            // console.log(req['sessionID']);
+            res.render('pages/index', {users: users, me: req.session['me']});
+        });
+
+});
+
+
+var user_router = require('./app/routers/user_router')(passport);
+app.use('/user', user_router);
 
 app.listen(port);
 console.log('App started! Look at ' + port);
